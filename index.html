@@ -1283,19 +1283,19 @@ const dodgeTexts = [
   "I love you 💕", "Final chance? 🙏"
 ];
 
-noBtn.addEventListener('mouseenter', () => {
+function dodgeNoButton() {
   dodgeCount++;
   runSound.currentTime = 0;
   runSound.play();
-  
+
   const randomX = Math.random() * 300 - 150;
   const randomY = Math.random() * 200 - 100;
-  
+
   gsap.to(noBtn, { x: randomX, y: randomY, duration: 0.3, ease: "power2.out" });
   gsap.to(yesBtn, { scale: 1 + (dodgeCount * 0.05), duration: 0.3, ease: "back.out" });
-  
+
   noBtn.textContent = dodgeTexts[dodgeCount % dodgeTexts.length];
-  
+
   if (dodgeCount === 4) {
     setTimeout(() => alert("Do you even wuv me anymore? 🥺💔"), 100);
   } else if (dodgeCount === 6) {
@@ -1303,7 +1303,17 @@ noBtn.addEventListener('mouseenter', () => {
   } else if (dodgeCount > 8) {
     finalModal.classList.add('active');
   }
+}
+
+// Desktop (unchanged behavior)
+noBtn.addEventListener('mouseenter', dodgeNoButton);
+
+// Mobile fix: pointer event + preventDefault (THIS is the only real change)
+noBtn.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  dodgeNoButton();
 });
+
 
 document.getElementById('optionYes').addEventListener('click', () => {
   finalModal.classList.remove('active');
